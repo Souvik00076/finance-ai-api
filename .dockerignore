@@ -1,0 +1,53 @@
+# Git
+.git
+.gitignore
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+env/
+.env
+.env.*
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Docker
+Dockerfile*
+docker-compose*
+.docker/
+
+# Documentation
+*.md
+docs/
+LICENSE
+
+# Misc
+.DS_Store
+Thumbs.db
+*.log
+
+# Firebase credentials (will be mounted at runtime)
+*.json
+!pyrightconfig.json
