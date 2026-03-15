@@ -45,7 +45,7 @@ async def signup(request: EmailSignupRequest):
     await user.insert()
     template_body = generate_verification_template(
         email, redirect_uri+f'?action_code=122321&email={email}')
-    send_email("souvikfs06@gmail.com",
+    send_email(email,
                'Email Verification Needed', template_body)
     return ResponseModel(
         success=True,
@@ -193,9 +193,9 @@ async def verify_user_email(request: VerifyUserEmailRequest):
     if user_info is None:
         raise NotFoundException(f'No user exist with the email {email}')
     user_info.email_verified = True
-    await user_info.save()
     firebase_admin.update_user(
         user_info.google_uid, disabled=False, email_verified=True)
+    await user_info.save()
     return ResponseModel(
         success=True,
         message=f"{email} has been verified"
