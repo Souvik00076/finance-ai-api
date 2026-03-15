@@ -76,10 +76,10 @@ async def login(request: EmailLoginRequest, response: Response):
     response.set_cookie(
         key="access_token",
         value=firebase_response['id_token'],
-        httponly=True,          # Prevents JavaScript access (XSS protection)
-        secure=is_production,   # HTTPS only in production
-        samesite="lax",         # CSRF protection
-        max_age=firebase_response['expires_in'],  # Expiry in seconds
+        httponly=True,
+        secure=is_production,
+        samesite="lax",
+        max_age=firebase_response['expires_in'],
         path="/",
     )
 
