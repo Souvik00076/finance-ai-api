@@ -11,7 +11,7 @@ PUBLIC_ROUTES = [
     "/api/v1/docs",
     "/api/v1/redoc",
     "/api/v1/openapi.json",  # OpenAPI schema endpoint
-    "api/v1/health",
+    "/health",
 ]
 
 

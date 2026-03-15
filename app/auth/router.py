@@ -1,5 +1,4 @@
-from fastapi import APIRouter, Request, Response, status, Depends
-from typing import Dict, Any
+from fastapi import APIRouter, Request, Response, status
 
 from app.core.config import settings
 from app.auth.firebase.Auth import FirebaseAuth
