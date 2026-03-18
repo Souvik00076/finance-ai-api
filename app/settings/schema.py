@@ -20,3 +20,5 @@ class ProfileResponse(BaseModel):
     created_at: str
     is_phone_linked: bool
     phone: str = ''
+    can_verify: bool
+    chat_number: Optional[str]

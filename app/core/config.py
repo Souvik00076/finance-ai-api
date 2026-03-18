@@ -44,12 +44,15 @@ class Settings(BaseSettings):
     TWILIO_SID: str = ""
     TWILIO_TOKEN: str = ""
     TWILIO_CONTENT_SID: str = ""
+    TWILIO_WHATSAPP_FROM: str = ""  # Your Twilio WhatsApp number e.g. +1xxxxxxxxxx
+    TWILIO_VERIFY_SERVICE_SID: str = ""  # Twilio Verify Service SID
 
-    #OAuth
-    GOOGLE_CLIENT_ID:str=""
-    GOOGLE_CLIENT_SECRET:str=""
-    BACKEND_URL:str=""
+    # OAuth
+    GOOGLE_CLIENT_ID: str = ""
+    GOOGLE_CLIENT_SECRET: str = ""
+    BACKEND_URL: str = ""
 
+    CHAT_NUMBER: str = ""
 
     class Config:
         env_file = ".env"

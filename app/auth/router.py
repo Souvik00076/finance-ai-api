@@ -105,10 +105,13 @@ async def login(request: EmailLoginRequest, response: Response):
         success=True,
     )
 
-@router.get("/oauth/{provider_id}",response_model=ResponseModel[OAuthRequestResponse],status_code=status.HTTP_200_OK)
-async def get_oauth_url(provider_id:OAuthProvider):
-    google_oauth:OAuthStrategy=GoogleOAuthStrategy()
-    if provider_id==OAuthProvider.facebook:
+
+@router.get("/oauth/{provider_id}",
+            response_model=ResponseModel[OAuthRequestResponse],
+            status_code=status.HTTP_200_OK)
+async def get_oauth_url(provider_id: OAuthProvider):
+    google_oauth: OAuthStrategy = GoogleOAuthStrategy()
+    if provider_id == OAuthProvider.facebook:
         pass
     state = str(uuid.uuid4())
     auth_url = google_oauth.get_auth_url(state)
@@ -119,14 +122,15 @@ async def get_oauth_url(provider_id:OAuthProvider):
         )
     )
 
-@router.get("/api/v1/auth/oauth/{provider_id}/callback")
-async def google_callback(provider_id:OAuthProvider,code: str, state: str):
-    google_oauth:Optional[OAuthStrategy]=None
 
-    if provider_id==OAuthProvider.facebook:
+@router.get("/api/v1/auth/oauth/{provider_id}/callback")
+async def google_callback(provider_id: OAuthProvider, code: str, state: str):
+    google_oauth: Optional[OAuthStrategy] = None
+
+    if provider_id == OAuthProvider.facebook:
         pass
-    if provider_id==OAuthProvider.google:
-        google_oauth=GoogleOAuthStrategy()
+    if provider_id == OAuthProvider.google:
+        google_oauth = GoogleOAuthStrategy()
     if google_oauth is None:
         raise BadRequestException(detail="Invalid provider")
     # Todo 1 : Search in redis for valid state
@@ -136,7 +140,6 @@ async def google_callback(provider_id:OAuthProvider,code: str, state: str):
     # Todo 5 : Redirect to dashboard
     access_token = await google_oauth.exchange_code_for_token(code)
     user_info = await google_oauth.get_user_info(access_token)
-
 
 
 @router.post("/refresh", response_model=ResponseModel, status_code=status.HTTP_200_OK)

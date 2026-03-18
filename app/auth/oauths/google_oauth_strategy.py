@@ -5,21 +5,24 @@ import httpx
 from fastapi import HTTPException, status
 
 from app.core.config import Settings
-from oauth_strategy import OAuthStrategy, OAuthUserInfo
+from app.auth.oauths.oauth_strategy import OAuthStrategy, OAuthUserInfo
 from app.core.config import settings
+
 
 class GoogleOAuthStrategy(OAuthStrategy):
     def __init__(self):
-        self.client_id =settings.GOOGLE_CLIENT_ID 
+        self.client_id = settings.GOOGLE_CLIENT_ID
         self.client_secret = settings.GOOGLE_CLIENT_SECRET
-        self.redirect_uri = f"{settings.BACKEND_URL}/api/v1/auth/oauth/google/callback"
+        self.redirect_uri = f"{
+            settings.BACKEND_URL}/api/v1/auth/oauth/google/callback"
 
     def get_auth_url(self, state: str, redirect_uri_params: dict[str, Any] = {}) -> str:
         state_data = {
             "state": state,
             "redirect_uri_params": redirect_uri_params
         }
-        state_encoded = base64.b64encode(json.dumps(state_data).encode()).decode()
+        state_encoded = base64.b64encode(
+            json.dumps(state_data).encode()).decode()
         params = {
             "client_id": self.client_id,
             "redirect_uri": self.redirect_uri,
@@ -44,7 +47,8 @@ class GoogleOAuthStrategy(OAuthStrategy):
                 },
             )
         if response.status_code >= 400:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Code")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Code")
         data = response.json()
         return data["access_token"]
 
@@ -55,7 +59,8 @@ class GoogleOAuthStrategy(OAuthStrategy):
                 headers={"Authorization": f"Bearer {access_token}"},
             )
         if response.status_code >= 400:
-            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Token")
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid Token")
         data = response.json()
         return OAuthUserInfo(
             id=data["id"],
