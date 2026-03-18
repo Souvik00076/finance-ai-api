@@ -45,6 +45,12 @@ class Settings(BaseSettings):
     TWILIO_TOKEN: str = ""
     TWILIO_CONTENT_SID: str = ""
 
+    #OAuth
+    GOOGLE_CLIENT_ID:str=""
+    GOOGLE_CLIENT_SECRET:str=""
+    BACKEND_URL:str=""
+
+
     class Config:
         env_file = ".env"
         case_sensitive = True

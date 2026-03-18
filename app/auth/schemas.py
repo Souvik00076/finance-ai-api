@@ -59,6 +59,13 @@ class AuthUserResponse(BaseModel):
     is_active: bool
     created_at: str
 
+class OAuthRequestResponse(BaseModel):
+    """Response for oauth get url"""
+    redirect_url:str
+
+class OAuthProvider(str,Enum):
+    google="google"
+    facebook="facebook"
 
 class AuthResponse(BaseModel):
     """Full auth response with user and tokens."""

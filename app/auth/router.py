@@ -1,5 +1,8 @@
+from typing import Optional
 from fastapi import APIRouter, Request, Response, status
 
+from app.auth.oauths.google_oauth_strategy import GoogleOAuthStrategy
+from app.auth.oauths.oauth_strategy import OAuthStrategy
 from app.core.config import settings
 from app.auth.firebase.Auth import FirebaseAuth
 from app.auth.schemas import (
@@ -8,8 +11,11 @@ from app.auth.schemas import (
     GoogleAuthRequest,
     AuthResponse,
     MessageResponse,
+    OAuthProvider,
+    OAuthRequestResponse,
     VerifyUserEmailRequest,
 )
+import uuid
 from app.models.user import User
 from app.schemas.common import ResponseModel
 from app.utils.send_email import send_email
@@ -99,19 +105,38 @@ async def login(request: EmailLoginRequest, response: Response):
         success=True,
     )
 
+@router.get("/oauth/{provider_id}",response_model=ResponseModel[OAuthRequestResponse],status_code=status.HTTP_200_OK)
+async def get_oauth_url(provider_id:OAuthProvider):
+    google_oauth:OAuthStrategy=GoogleOAuthStrategy()
+    if provider_id==OAuthProvider.facebook:
+        pass
+    state = str(uuid.uuid4())
+    auth_url = google_oauth.get_auth_url(state)
+    return ResponseModel(
+        message="Url for oauth",
+        data=OAuthRequestResponse(
+            redirect_url=auth_url
+        )
+    )
 
-@router.post("/oauth/google", response_model=AuthResponse)
-async def google_auth(request: GoogleAuthRequest):
-    """
-    Authenticate with Google OAuth.
+@router.get("/api/v1/auth/oauth/{provider_id}/callback")
+async def google_callback(provider_id:OAuthProvider,code: str, state: str):
+    google_oauth:Optional[OAuthStrategy]=None
 
-    Handles both login and signup:
-    - If user exists: logs them in
-    - If user doesn't exist: creates a new account
+    if provider_id==OAuthProvider.facebook:
+        pass
+    if provider_id==OAuthProvider.google:
+        google_oauth=GoogleOAuthStrategy()
+    if google_oauth is None:
+        raise BadRequestException(detail="Invalid provider")
+    # Todo 1 : Search in redis for valid state
+    # Todo 2 : get token using code
+    # Todo 3 : Upsert user
+    # Todo 4 : get firebase access_token and refresh_token and paste in cookies
+    # Todo 5 : Redirect to dashboard
+    access_token = await google_oauth.exchange_code_for_token(code)
+    user_info = await google_oauth.get_user_info(access_token)
 
-    Returns user data and authentication tokens.
-    """
-    pass
 
 
 @router.post("/refresh", response_model=ResponseModel, status_code=status.HTTP_200_OK)
