@@ -11,7 +11,7 @@ from app.core.config import settings
 router = APIRouter(prefix='/settings', tags=["Settings"])
 
 
-@router.get("/", status_code=status.HTTP_200_OK, response_model=ResponseModel[ProfileResponse])
+@router.get("", status_code=status.HTTP_200_OK, response_model=ResponseModel[ProfileResponse])
 async def profile_info(current_user: User = Depends(get_current_user)):
     """Get current user's profile information."""
     return ResponseModel(
