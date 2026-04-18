@@ -40,6 +40,7 @@ async def profile_info(current_user: User = Depends(get_current_user)):
             email_verified=current_user.email_verified,
             is_phone_linked=current_user.is_phone_linked,
             is_telegram_linked=current_user.is_telegram_linked,
+            total_spent=current_user.total_spent,
             can_verify=False,
             phone=current_user.phone or '',
             created_at=current_user.created_at.isoformat(),
