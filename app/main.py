@@ -6,9 +6,10 @@ import logging
 from app.core.config import settings
 from app.db.mongodb import MongoDB
 from app.api.v1.router import api_router
-from app.auth.firebase import init_firebase
+from app.api.v1.auth.firebase import init_firebase
 from app.middleware import AuthMiddleware
 from app.models.user import User
+from app.models.user_data import UserData
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -22,7 +23,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting up...")
 
     db = MongoDB()
-    await db.connect(document_models=[User])
+    await db.connect(document_models=[User, UserData])
     app.state.db = db
 
     # Initialize Firebase (optional - only if credentials configured)

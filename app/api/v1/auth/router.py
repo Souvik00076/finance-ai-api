@@ -1,11 +1,11 @@
 from typing import Optional
 from fastapi import APIRouter, Request, Response, status
 
-from app.auth.oauths.google_oauth_strategy import GoogleOAuthStrategy
-from app.auth.oauths.oauth_strategy import OAuthStrategy
+from app.api.v1.auth.oauths.google_oauth_strategy import GoogleOAuthStrategy
+from app.api.v1.auth.oauths.oauth_strategy import OAuthStrategy
 from app.core.config import settings
-from app.auth.firebase.Auth import FirebaseAuth
-from app.auth.schemas import (
+from app.api.v1.auth.firebase.Auth import FirebaseAuth
+from app.api.v1.auth.schemas import (
     EmailSignupRequest,
     EmailLoginRequest,
     GoogleAuthRequest,
@@ -36,11 +36,14 @@ async def signup(request: EmailSignupRequest):
     (email, password, full_name, redirect_uri) = (
         request.email, request.password, request.full_name, request.redirect_uri)
     firebase_admin = FirebaseAuth()
+
     user_info = await User.find_one(User.email == email)
+
     if user_info is not None:
         raise ConflictException(detail=f'User with {email} already exist')
 
     firebase_user = firebase_admin.create_user(email, password)
+
     user = User(
         email=email,
         provider='email',
@@ -49,6 +52,7 @@ async def signup(request: EmailSignupRequest):
     if full_name is not None:
         user.full_name = full_name
     await user.insert()
+    print("FUcK")
     template_body = generate_verification_template(
         email, redirect_uri+f'?action_code=122321&email={email}')
     send_email(email,

@@ -3,15 +3,12 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 from typing import Callable
 
-from app.auth.firebase.Auth import FirebaseAuth
+from app.api.v1.auth.firebase.Auth import FirebaseAuth
 
-# Routes that don't require authentication
-PUBLIC_ROUTES = [
-    "/api/v1/auth",  # Auth endpoints
-    "/api/v1/docs",
-    "/api/v1/redoc",
-    "/api/v1/openapi.json",  # OpenAPI schema endpoint
-    "/health",
+# Routes that require authentication
+PROTECTED_ROUTES = [
+    "/api/v1/settings",
+    "/api/v1/analytics",
 ]
 
 
@@ -19,19 +16,18 @@ class AuthMiddleware(BaseHTTPMiddleware):
     """
     Authentication middleware that verifies tokens from cookies.
 
-    Skips verification for public routes (auth, docs, etc.)
+    Only enforces auth on protected routes (settings, analytics).
     """
 
     async def dispatch(self, request: Request, call_next: Callable):
-        # Skip auth for public routes
         path = request.url.path
 
-        if any(path.startswith(route) for route in PUBLIC_ROUTES):
+        # Only enforce auth on protected routes
+        if not any(path.startswith(route) for route in PROTECTED_ROUTES):
             return await call_next(request)
 
         # Get access token from cookie
         access_token = request.cookies.get("access_token")
-
         if not access_token:
             return JSONResponse(
                 status_code=401,

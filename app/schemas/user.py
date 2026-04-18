@@ -32,6 +32,8 @@ class UserResponse(BaseModel):
     is_active: bool = True
     phone: Optional[str] = None
     is_phone_linked: bool = False
+    is_telegram_linked: bool = False
+    telegram_phone: Optional[str] = None
     created_at: Optional[datetime] = None
     updated_at: Optional[datetime] = None
 

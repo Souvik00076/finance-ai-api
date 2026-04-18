@@ -2,11 +2,11 @@ from pydantic import BaseModel, EmailStr
 from typing import Optional
 
 
-class WhatsappLinkRequest(BaseModel):
+class ProviderLinkRequest(BaseModel):
     phone: str
 
 
-class VerifyWhatsappRequest(BaseModel):
+class VerifyProviderRequest(BaseModel):
     otp: str
 
 
@@ -19,6 +19,7 @@ class ProfileResponse(BaseModel):
     email_verified: bool
     created_at: str
     is_phone_linked: bool
+    is_telegram_linked: bool
     phone: str = ''
     can_verify: bool
     chat_number: Optional[str]

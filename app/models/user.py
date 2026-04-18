@@ -21,7 +21,10 @@ class User(Document):
     is_active: bool = True
     is_superuser: bool = False
     phone: Optional[str] = None
+    telegram_id: Optional[str] = None
     is_phone_linked: bool = False
+    is_telegram_linked: bool = False
+    total_spent: float = 0.0
     created_at: datetime = Field(default_factory=_utcnow)
     updated_at: datetime = Field(default_factory=_utcnow)
 

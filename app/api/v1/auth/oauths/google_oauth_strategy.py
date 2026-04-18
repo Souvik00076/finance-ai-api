@@ -5,7 +5,7 @@ import httpx
 from fastapi import HTTPException, status
 
 from app.core.config import Settings
-from app.auth.oauths.oauth_strategy import OAuthStrategy, OAuthUserInfo
+from app.api.v1.auth.oauths.oauth_strategy import OAuthStrategy, OAuthUserInfo
 from app.core.config import settings
 
 

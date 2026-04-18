@@ -20,7 +20,7 @@ class Settings(BaseSettings):
 
     # MongoDB
     MONGODB_URL: str = "mongodb://localhost:27017"
-    MONGODB_DB_NAME: str = "finance_ai"
+    MONGODB_DB_NAME: str = "finance-ai"
 
     # JWT Authentication
     JWT_SECRET_KEY: str = secrets.token_urlsafe(32)  # Override in production!
@@ -53,6 +53,9 @@ class Settings(BaseSettings):
     BACKEND_URL: str = ""
 
     CHAT_NUMBER: str = ""
+
+    # Telegram
+    TELEGRAM_BOT_TOKEN: str = ""
 
     class Config:
         env_file = ".env"
