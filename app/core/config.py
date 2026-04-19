@@ -47,6 +47,9 @@ class Settings(BaseSettings):
     TWILIO_WHATSAPP_FROM: str = ""  # Your Twilio WhatsApp number e.g. +1xxxxxxxxxx
     TWILIO_VERIFY_SERVICE_SID: str = ""  # Twilio Verify Service SID
 
+    # Redis
+    REDIS_URL: str = "redis://localhost:6379/0"
+
     # OAuth
     GOOGLE_CLIENT_ID: str = ""
     GOOGLE_CLIENT_SECRET: str = ""

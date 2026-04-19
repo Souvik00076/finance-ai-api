@@ -10,6 +10,7 @@ from app.api.v1.auth.firebase import init_firebase
 from app.middleware import AuthMiddleware
 from app.models.user import User
 from app.models.user_data import UserData
+from app.core.redis import redis_manager
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -32,10 +33,14 @@ async def lifespan(app: FastAPI):
     except Exception as e:
         logger.warning(f"Firebase initialization skipped: {e}")
 
+    # Connect Redis
+    await redis_manager.connect()
+
     yield
 
     # Shutdown
     logger.info("Shutting down...")
+    await redis_manager.disconnect()
     await db.close()
 
 
