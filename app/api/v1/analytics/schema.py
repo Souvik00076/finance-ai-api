@@ -92,3 +92,37 @@ class RecentIncomeItem(BaseModel):
     date: str                      # earning date, YYYY-MM-DD (IST)
     channel: str                   # whatsapp | telegram
     date_from_message: bool        # False = date assumed from message time
+
+
+# ───────────── Period explorer ─────────────
+
+class PeriodsResponse(BaseModel):
+    """Months (YYYY-MM) and years with any data, newest first."""
+    months: List[str] = []
+    years: List[int] = []
+
+
+class TrendPoint(BaseModel):
+    """Total for one bucket. period is YYYY-MM-DD, YYYY-MM or YYYY."""
+    period: str
+    amount: float
+
+
+class BreakdownItem(BaseModel):
+    name: str
+    amount: float
+
+
+class TopExpenseItem(BaseModel):
+    id: str
+    name: str
+    amount: float
+    category: str
+    date: str      # YYYY-MM-DD (IST)
+    source: str    # whatsapp | telegram
+
+
+class WeekdayItem(BaseModel):
+    day: str       # Mon..Sun
+    total: float
+    average: float
