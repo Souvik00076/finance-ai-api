@@ -10,6 +10,7 @@ from app.api.v1.auth.firebase import init_firebase
 from app.middleware import AuthMiddleware
 from app.models.user import User
 from app.models.user_data import UserData
+from app.models.user_income import UserIncome
 from app.core.redis import redis_manager
 
 # Configure logging
@@ -24,7 +25,7 @@ async def lifespan(app: FastAPI):
     logger.info("Starting up...")
 
     db = MongoDB()
-    await db.connect(document_models=[User, UserData])
+    await db.connect(document_models=[User, UserData, UserIncome])
     app.state.db = db
 
     # Initialize Firebase (optional - only if credentials configured)

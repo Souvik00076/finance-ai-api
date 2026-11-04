@@ -25,6 +25,7 @@ class User(Document):
     is_phone_linked: bool = False
     is_telegram_linked: bool = False
     total_spent: float = 0.0
+    total_earned: float = 0.0
     created_at: datetime = Field(default_factory=_utcnow)
     updated_at: datetime = Field(default_factory=_utcnow)
 

@@ -68,3 +68,25 @@ class DailyTrendItem(BaseModel):
     """Single day's total spending."""
     date: str
     amount: float
+
+
+# ───────────── Income ─────────────
+
+class IncomeStatisticsResponse(BaseModel):
+    """Income totals across various time windows (IST, by earning date)."""
+    daily_earned: float
+    last_7_days_earned: float
+    last_14_days_earned: float
+    last_month_earned: float       # current calendar month
+    last_2_months_earned: float    # current + previous calendar month
+
+
+class RecentIncomeItem(BaseModel):
+    """Single income entry."""
+    id: str
+    amount: float
+    category: str
+    source: str                    # who paid, e.g. "Acme Corp"
+    date: str                      # earning date, YYYY-MM-DD (IST)
+    channel: str                   # whatsapp | telegram
+    date_from_message: bool        # False = date assumed from message time

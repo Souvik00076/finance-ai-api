@@ -6,6 +6,7 @@ from app.models import provider
 from app.models.provider import ProviderEnum
 from app.models.user import User
 from app.models.user_data import UserData
+from app.models.user_income import UserIncome
 from app.api.v1.settings.schema import ProfileResponse, VerifyProviderRequest, ProviderLinkRequest
 from app.schemas.common import ResponseModel
 from app.utils.send_whatsapp import send_whatsapp_message, verify_otp
@@ -16,7 +17,7 @@ router = APIRouter(prefix='/settings', tags=["Settings"])
 
 
 async def _backfill_total_spent(user: User, chat_id: str) -> None:
-    """If user's total_spent is 0, sum all historical item prices for the chat_id."""
+    """Recompute total_spent and total_earned from historical data for the chat_id."""
     docs = await UserData.find({"chat_id": chat_id}).to_list()
     total = 0.0
     for doc in docs:
@@ -24,6 +25,11 @@ async def _backfill_total_spent(user: User, chat_id: str) -> None:
             total += item.price
     if total > 0:
         user.total_spent = total
+
+    incomes = await UserIncome.find({"chat_id": chat_id}).to_list()
+    total_earned = sum(income.amount for income in incomes)
+    if total_earned > 0:
+        user.total_earned = total_earned
 
 
 @router.get("", status_code=status.HTTP_200_OK, response_model=ResponseModel[ProfileResponse])
@@ -41,6 +47,7 @@ async def profile_info(current_user: User = Depends(get_current_user)):
             is_phone_linked=current_user.is_phone_linked,
             is_telegram_linked=current_user.is_telegram_linked,
             total_spent=current_user.total_spent,
+            total_earned=current_user.total_earned,
             can_verify=False,
             phone=current_user.phone or '',
             created_at=current_user.created_at.isoformat(),

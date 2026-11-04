@@ -21,6 +21,7 @@ class ProfileResponse(BaseModel):
     is_phone_linked: bool
     is_telegram_linked: bool
     total_spent: float
+    total_earned: float = 0.0
     phone: str = ''
     can_verify: bool
     chat_number: Optional[str]
