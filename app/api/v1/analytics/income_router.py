@@ -7,6 +7,7 @@ from app.dependencies import get_current_user
 from app.models.user import User
 from app.models.user_income import UserIncome
 from app.schemas.common import ResponseModel
+from app.api.v1.analytics.totals import all_time_earned
 from app.api.v1.analytics.schema import (
     CategoryBreakdownItem,
     IncomeStatisticsResponse,
@@ -71,6 +72,8 @@ async def income_statistics(current_user: User = Depends(get_current_user)):
             stats.last_7_days_earned += amount
         if ms >= today_ms:
             stats.daily_earned += amount
+
+    stats.all_time_earned = await all_time_earned(chat_ids)
 
     return ResponseModel(success=True, message="Income statistics retrieved successfully", data=stats)
 

@@ -50,6 +50,7 @@ class StatisticsResponse(BaseModel):
     last_14_days_spend: float
     last_month_spend: float
     last_2_months_spend: float
+    all_time_spend: float = 0.0     # aggregated from user_datas
 
 
 class MonthlyTrendItem(BaseModel):
@@ -79,6 +80,7 @@ class IncomeStatisticsResponse(BaseModel):
     last_14_days_earned: float
     last_month_earned: float       # current calendar month
     last_2_months_earned: float    # current + previous calendar month
+    all_time_earned: float = 0.0   # aggregated from user_incomes
 
 
 class RecentIncomeItem(BaseModel):

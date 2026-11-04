@@ -7,6 +7,7 @@ from app.dependencies import get_current_user
 from app.models.user import User
 from app.models.user_data import UserData
 from app.schemas.common import ResponseModel
+from app.api.v1.analytics.totals import all_time_spend
 from app.api.v1.analytics.schema import (
     StatisticsResponse,
     RecentExpenseItem,
@@ -104,6 +105,7 @@ async def statistics(current_user: User = Depends(get_current_user)):
             last_14_days_spend=last_14,
             last_month_spend=last_month,
             last_2_months_spend=last_2_months,
+            all_time_spend=await all_time_spend(chat_ids),
         ),
     )
 
